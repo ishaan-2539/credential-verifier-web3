@@ -216,3 +216,12 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Python / Environments
+backend/venv/
+backend/.env
+**/__pycache__/
+*.pyc
+
+# Build outputs
+backend/app/contracts/compiled_contract.json
