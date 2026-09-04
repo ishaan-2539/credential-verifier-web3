@@ -1,64 +1,84 @@
-# Academic Credential Registry
+# 🔐 Credential Verifier Web3
 
-> A decentralized, privacy-first academic credential verification platform built with **FastAPI**, **Solidity**, and **Ethereum Smart Contracts**.
+A blockchain-based credential verification system that uses **SHA-256 hashing**, **Ethereum smart contracts**, and a **FastAPI backend** to issue, verify, and revoke academic credentials in a tamper-evident manner.
 
----
-
-## 📌 Overview
-
-The **Academic Credential Registry** provides educational institutions with a tamper-proof method to issue and verify student degrees, diplomas, and certifications on-chain.
-
-Instead of storing sensitive personally identifiable information (PII) on a public blockchain, this platform converts student credentials into deterministic **SHA-256 cryptographic hashes** (`bytes32`). Only the cryptographic signature is anchored on-chain, ensuring zero data leakage while offering instant, free, and mathematical proof of authenticity for employers and universities.
+The system stores **credential hashes rather than Personally Identifiable Information (PII)** directly on the blockchain, allowing credentials to be verified without exposing the underlying student information.
 
 ---
 
-## 🛠️ Tech Stack
+# ✨ Features
 
-### **Backend & Web3 Integration**
-* **Python 3.10+ & FastAPI:** Asynchronous REST API architecture providing fast execution and auto-generated Swagger documentation.
-* **Web3.py:** Ethereum JSON-RPC client interface for transaction signing, smart contract interaction, and gas estimation.
-* **Pydantic v2 & Pydantic Settings:** Strict data modeling, input validation, and fail-fast environment management (`.env`).
-* **py-solc-x:** Automated local Solidity smart contract compilation.
-
-### **Blockchain & Smart Contracts**
-* **Solidity (`^0.8.20`):** Immutable smart contract (`CredentialRegistry.sol`) storing credential hashes, issuer addresses, timestamps, and validity flags.
-* **Ganache / Anvil:** Local Ethereum node simulation for instant zero-cost testing.
-
-### **Frontend**
-* **HTML5 & Vanilla JavaScript:** Lightweight, zero-build-step client interface utilizing native `fetch` requests.
-* **Tailwind CSS:** Custom dark, slate-themed workspace styled with custom typography (*Plus Jakarta Sans*, *Instrument Serif*, and *JetBrains Mono*).
+* 🎓 **Credential Issuance** — Hashes credential information using SHA-256 and records the hash on-chain.
+* 🔍 **Credential Verification** — Verifies credentials directly against Ethereum smart contract state.
+* 🚫 **Credential Revocation** — Allows the contract owner to invalidate previously issued credentials.
+* 🛡️ **Privacy by Design** — Student information is never stored directly on the blockchain.
+* 🧮 **Tamper Detection** — Any modification to the credential data results in a different hash.
+* ⛓️ **Blockchain-backed Integrity** — Credential records are anchored to an Ethereum blockchain.
+* ⚡ **Gas-free Verification** — Verification is a read-only blockchain operation and does not require gas.
+* 🌐 **FastAPI Backend** — Provides REST API endpoints for interacting with the blockchain.
+* 🖥️ **Web Frontend** — Provides interfaces for issuing and verifying credentials.
 
 ---
 
-## 📂 System Architecture
+# 🏗️ System Architecture
 
 ```text
-credential-verifier-web3/
-├── backend/
-│   ├── app/
-│   │   ├── clients/
-│   │   │   └── blockchain_client.py   # Web3.py RPC client wrapper
-│   │   ├── contracts/
-│   │   │   ├── CredentialRegistry.sol  # Solidity Smart Contract
-│   │   │   └── compiled_contract.json # Compiled artifact (ABI + Bytecode)
-│   │   ├── routers/
-│   │   │   └── verification_router.py  # FastAPI APIRouter endpoints
-│   │   ├── services/
-│   │   │   └── verification_service.py # SHA-256 Hashing & business logic
-│   │   ├── config.py                   # Pydantic Settings (.env handling)
-│   │   └── main.py                     # FastAPI application entrypoint
-│   ├── .env                            # Local secrets (Private keys, RPC URLs)
-│   ├── compile_contract.py             # Script to compile Solidity contract
-│   ├── deploy_contract.py              # Script to deploy contract to network
-│   └── requirements.txt
-├── frontend/
-│   └── index.html                      # Unified dark studio UI
-├── .gitignore
-└── README.md
+┌──────────────────────┐
+│   Student Credential │
+│  ID / Degree / Date  │
+└──────────┬───────────┘
+           │
+           ▼
+┌──────────────────────┐
+│      SHA-256 Hash    │
+└──────────┬───────────┘
+           │
+           ▼
+┌──────────────────────┐
+│    FastAPI Backend   │
+└──────────┬───────────┘
+           │
+           ▼
+┌──────────────────────┐
+│ Ethereum Smart       │
+│ Contract             │
+│ CredentialRegistry   │
+└──────────┬───────────┘
+           │
+           ▼
+┌──────────────────────┐
+│ Credential Hash      │
+│ Stored On-Chain      │
+└──────────────────────┘
+```
+
+For verification:
+
+```text
+Credential Details
+       │
+       ▼
+  SHA-256 Hash
+       │
+       ▼
+FastAPI Backend
+       │
+       ▼
+Ethereum Smart Contract
+       │
+       ▼
+Compare Stored Hash
+       │
+       ▼
+ ┌───────────────┐
+ │ Valid /       │
+ │ Invalid       │
+ └───────────────┘
+```
 
 ---
 
-## 🔌 API Endpoints Reference
+# 🔌 API Endpoints Reference
 
 ## 1. 🩺 Health Check
 
@@ -129,7 +149,13 @@ Queries the smart contract to verify whether a credential exists and is currentl
 
 # 📜 Smart Contract Reference
 
-The core blockchain functionality is implemented in `CredentialRegistry.sol`.
+The core blockchain functionality is implemented in:
+
+```text
+CredentialRegistry.sol
+```
+
+## 📋 Contract Functions
 
 | Function                          | Type                     | Description                                                                     |
 | --------------------------------- | ------------------------ | ------------------------------------------------------------------------------- |
@@ -137,10 +163,10 @@ The core blockchain functionality is implemented in `CredentialRegistry.sol`.
 | `verifyCredential(bytes32 _hash)` | `external view`          | Returns the credential's validity, issuer address, and block timestamp.         |
 | `revokeCredential(bytes32 _hash)` | `external` (`onlyOwner`) | Marks an existing credential as invalid.                                        |
 
-### 🔐 Access Control
+## 🔐 Access Control
 
-* `issueCredential()` can only be called by the contract owner.
-* `revokeCredential()` can only be called by the contract owner.
+* `issueCredential()` can only be called by the **contract owner**.
+* `revokeCredential()` can only be called by the **contract owner**.
 * `verifyCredential()` is publicly readable and does not require gas when called as a read operation.
 
 ---
@@ -199,19 +225,19 @@ python -m venv venv
 
 ### Activate the Virtual Environment
 
-**Windows:**
+#### 🪟 Windows
 
 ```bash
 .\venv\Scripts\activate
 ```
 
-**macOS / Linux:**
+#### 🍎 macOS / 🐧 Linux
 
 ```bash
 source venv/bin/activate
 ```
 
-### Install Dependencies
+### 📦 Install Dependencies
 
 ```bash
 pip install -r requirements.txt
@@ -221,7 +247,13 @@ pip install -r requirements.txt
 
 ## 4. 📜 Compile & Deploy the Smart Contract
 
-Create a `backend/.env` file:
+Create a:
+
+```text
+backend/.env
+```
+
+file with the following configuration:
 
 ```env
 WEB3_RPC_URL=http://127.0.0.1:8545
@@ -245,7 +277,7 @@ python deploy_contract.py
 
 The deployment script will print the newly deployed **Contract Address**.
 
-Copy this address into your `.env` file:
+Copy the printed address into your `.env` file:
 
 ```env
 CONTRACT_ADDRESS=0xYOUR_DEPLOYED_CONTRACT_ADDRESS
@@ -263,13 +295,17 @@ uvicorn app.main:app --reload
 
 The API server will be available at:
 
-**API:** `http://127.0.0.1:8000`
+```text
+http://127.0.0.1:8000
+```
 
 ### 📚 Interactive API Documentation
 
-FastAPI automatically provides Swagger UI:
+FastAPI automatically provides Swagger UI at:
 
-`http://127.0.0.1:8000/docs`
+```text
+http://127.0.0.1:8000/docs
+```
 
 ---
 
@@ -281,11 +317,15 @@ Open:
 frontend/index.html
 ```
 
-directly in your browser.
+directly in your web browser.
 
 Alternatively, you can use **VS Code Live Server**.
 
-### 🎓 Issue a Credential
+---
+
+# 🎓 Using the Application
+
+## 📝 Issue a Credential
 
 1. Open the **Issue Credential** tab.
 2. Enter the:
@@ -294,16 +334,20 @@ Alternatively, you can use **VS Code Live Server**.
    * Degree Name
    * Issue Date
 3. Click **Anchor Credential to Ledger**.
-4. The backend hashes the credential data and records the hash on-chain.
+4. The backend hashes the credential data using SHA-256.
+5. The resulting credential hash is recorded on-chain.
 
-### 🔍 Verify a Record
+---
+
+## 🔍 Verify a Student Record
 
 1. Switch to the **Verify Student Record** tab.
 2. Enter the **exact same credential details**.
 3. Submit the verification request.
-4. The application queries the blockchain and displays whether the credential is valid.
+4. The application queries the blockchain.
+5. The application displays whether the credential is valid.
 
-> 💡 Even a single-character change, extra space, or different date will generate a completely different hash.
+> 💡 **Important:** Even a single-character change, extra space, or different date will generate a completely different hash.
 
 ---
 
@@ -319,13 +363,13 @@ Your local Ganache node was restarted and generated a new set of accounts and pr
 
 1. Copy a fresh private key from the active Ganache console.
 2. Update `ISSUER_PRIVATE_KEY` in `backend/.env`.
-3. Re-run:
+3. Re-run the contract deployment:
 
 ```bash
 python deploy_contract.py
 ```
 
-4. Copy the new contract address.
+4. Copy the newly generated contract address.
 5. Update `CONTRACT_ADDRESS` in `backend/.env`.
 
 ---
@@ -370,7 +414,7 @@ For example:
 from fastapi.middleware.cors import CORSMiddleware
 ```
 
-and that the middleware is added to the FastAPI application.
+and make sure the middleware is added to the FastAPI application.
 
 ---
 
@@ -382,7 +426,7 @@ and that the middleware is added to the FastAPI application.
 
 Instead, the application stores a cryptographic hash of the credential data.
 
-This means the blockchain acts as a **tamper-evident verification layer** without directly exposing the student's personal information.
+This allows the blockchain to act as a **tamper-evident verification layer** without directly exposing the student's personal information.
 
 ---
 
@@ -390,7 +434,7 @@ This means the blockchain acts as a **tamper-evident verification layer** withou
 
 The credential data is converted into a **SHA-256 hash** before being recorded on-chain.
 
-Even a tiny modification — such as:
+Even a tiny modification, such as:
 
 * Changing one character
 * Adding a space
@@ -405,48 +449,172 @@ As a result, altered credentials will fail blockchain verification.
 
 ## 🚫 Revocation Support
 
-The smart contract includes an owner-only:
+The smart contract includes the following owner-only function:
 
 ```solidity
 revokeCredential(bytes32 _hash)
 ```
 
-function.
-
 This allows previously issued credentials to be marked as **invalid** if they were issued incorrectly or become compromised.
 
 ---
 
-# 🏗️ How It Works
-
-The overall credential verification flow is:
-
-```text
-Student Credential
-       │
-       ▼
-  SHA-256 Hash
-       │
-       ▼
-FastAPI Backend
-       │
-       ▼
-Ethereum Smart Contract
-       │
-       ▼
-Credential Hash Stored On-Chain
-       │
-       ▼
-   Verification
-       │
-       ▼
-Compare Generated Hash
-       │
-       ▼
- Valid / Invalid
-```
-
-### 🔑 Core Principle
+# 🔑 Core Principle
 
 > **The blockchain does not store the student's credential itself — it stores a cryptographic proof that can be used to verify the credential's integrity.**
 
+The combination of **SHA-256 hashing + Ethereum smart contracts + FastAPI** provides a tamper-evident mechanism for issuing and verifying academic credentials while keeping the underlying student information off-chain.
+
+---
+
+# 🧪 Example Credential Flow
+
+### 1️⃣ Credential Issued
+
+```text
+Student ID:
+STU-2026-901
+
+Degree:
+B.Tech Computer Science & Engineering
+
+Issue Date:
+2026-05-15
+```
+
+⬇️
+
+### 2️⃣ SHA-256 Hash Generated
+
+```text
+0x4a9e...
+```
+
+⬇️
+
+### 3️⃣ Hash Recorded On-Chain
+
+```text
+Ethereum Smart Contract
+        │
+        ├── Credential Hash
+        ├── Issuer Address
+        └── Timestamp
+```
+
+⬇️
+
+### 4️⃣ Credential Verified
+
+The same credential details are hashed again.
+
+```text
+Generated Hash
+      │
+      ▼
+Compare With
+On-Chain Hash
+      │
+      ▼
+Valid ✅
+```
+
+If any credential information has been modified:
+
+```text
+Modified Credential
+        │
+        ▼
+Different SHA-256 Hash
+        │
+        ▼
+No Matching Record
+        │
+        ▼
+Invalid ❌
+```
+
+---
+
+# 📁 Project Structure
+
+A typical project structure is:
+
+```text
+credential-verifier-web3/
+│
+├── backend/
+│   ├── app/
+│   │   └── main.py
+│   │
+│   ├── .env
+│   ├── requirements.txt
+│   ├── compile_contract.py
+│   └── deploy_contract.py
+│
+├── frontend/
+│   └── index.html
+│
+└── contracts/
+    └── CredentialRegistry.sol
+```
+
+> 📌 The exact structure may vary depending on the repository implementation.
+
+---
+
+# ⚠️ Development Notes
+
+* Ganache is used as a **local simulated Ethereum blockchain**.
+* Restarting Ganache generates a new set of accounts and private keys.
+* When Ganache is restarted, the smart contract must be deployed again.
+* The corresponding `ISSUER_PRIVATE_KEY` and `CONTRACT_ADDRESS` must then be updated in `backend/.env`.
+* The blockchain stores the **credential hash**, not the student's raw credential information.
+* Verification is a read-only operation and therefore does not require gas.
+* Credential issuance and revocation are blockchain transactions and therefore require gas.
+* Credential hashes are unique, so the same credential cannot be issued twice.
+
+---
+
+# 🛡️ Security Warning
+
+The `.env` file contains the issuer's private key:
+
+```env
+ISSUER_PRIVATE_KEY=0xYOUR_GANACHE_PRIVATE_KEY_HERE
+```
+
+Never commit `.env` or real private keys to GitHub.
+
+For local development, use Ganache-generated accounts only. Never use private keys containing real funds or production credentials.
+
+---
+
+# 🎯 Summary
+
+**Credential Verifier Web3** provides a simple blockchain-based approach to academic credential verification:
+
+```text
+        🎓 Credential
+              │
+              ▼
+       🧮 SHA-256 Hash
+              │
+              ▼
+       ⚡ FastAPI Backend
+              │
+              ▼
+       ⛓️ Ethereum Contract
+              │
+              ▼
+      🔐 Hash Stored On-Chain
+              │
+              ▼
+        🔍 Verification
+              │
+       ┌──────┴──────┐
+       ▼             ▼
+   ✅ Valid       ❌ Invalid
+```
+
+The system demonstrates how blockchain can be used as a **tamper-evident trust layer** while keeping sensitive credential information off-chain.
