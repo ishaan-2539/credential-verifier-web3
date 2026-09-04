@@ -1,6 +1,6 @@
 # Academic Credential Registry
 
-> A decentralized, privacy-first academic credential verification system built with **FastAPI**, **Solidity**, and **Ethereum Smart Contracts**.
+> A decentralized, privacy-first academic credential verification platform built with **FastAPI**, **Solidity**, and **Ethereum Smart Contracts**.
 
 ---
 
@@ -30,7 +30,7 @@ Instead of storing sensitive personally identifiable information (PII) on a publ
 
 ---
 
-## 📁 System Architecture
+## 📂 System Architecture
 
 ```text
 credential-verifier-web3/
