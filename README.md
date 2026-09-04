@@ -56,7 +56,9 @@ credential-verifier-web3/
 ├── .gitignore
 └── README.md
 
-# 🔌 API Endpoints Reference
+---
+
+## 🔌 API Endpoints Reference
 
 ## 1. 🩺 Health Check
 
