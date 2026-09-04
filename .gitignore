@@ -225,3 +225,4 @@ backend/.env
 
 # Build outputs
 backend/app/contracts/compiled_contract.json
+*.xml
