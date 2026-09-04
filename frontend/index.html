@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic Credential Registry</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        backdrop: '#14171A',   /* Base background */
+                        surface: '#1C2126',    /* Unified dark card surface */
+                        inputbg: '#14171A',    /* Recessed dark input background */
+                        parchment: '#F5F2EB', /* Text color */
+                        emerald: '#3A5A40',   /* Primary button/accent */
+                        accent: '#D4A373',    /* Warm brass accent */
+                        hairline: '#2E353B',  /* Unified dark border */
+                        crimson: '#A44238'
+                    },
+                    fontFamily: {
+                        serif: ['Instrument Serif', 'serif'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    borderRadius: {
+                        DEFAULT: '6px',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { box-shadow: none !important; }
+        body { background-color: #14171A; color: #F5F2EB; }
+        .border-dark { border: 1px solid #2E353B; }
+        
+        .tab-active { color: #F5F2EB; border-bottom: 2px solid #3A5A40; font-weight: 600; background-color: rgba(58, 90, 64, 0.1); }
+        .tab-inactive { color: #78756E; background-color: transparent; }
+        
+        input { background-color: #14171A; color: #F5F2EB; }
+        input:focus { outline: none; border-color: #3A5A40; }
+        
+        /* Custom calendar icon styling for dark mode */
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(0.8);
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased min-h-screen flex flex-col justify-between selection:bg-emerald selection:text-parchment">
+
+    <!-- Top Navigation -->
+    <header class="w-full border-b border-dark px-8 py-4 flex items-center justify-between bg-surface">
+        <div class="flex items-center gap-3">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald"></span>
+            <span class="font-semibold tracking-tight text-parchment text-sm">Academic Credential Registry</span>
+        </div>
+        <div class="flex items-center gap-4 text-xs font-mono">
+            <span class="text-parchment/50">Node: Local RPC</span>
+            <span class="text-accent bg-accent/10 px-2.5 py-1 rounded border border-accent/20">Protocol Active</span>
+        </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="max-w-6xl mx-auto w-full px-6 py-10 my-auto">
+        
+        <!-- Protocol Stats Bar -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+            <div class="bg-surface p-4 rounded border-dark flex flex-col justify-between">
+                <span class="text-xs text-parchment/50 font-mono uppercase tracking-wider">Storage Standard</span>
+                <span class="text-sm font-semibold text-parchment mt-1">SHA-256 On-Chain Hashes</span>
+            </div>
+            <div class="bg-surface p-4 rounded border-dark flex flex-col justify-between">
+                <span class="text-xs text-parchment/50 font-mono uppercase tracking-wider">Privacy Protocol</span>
+                <span class="text-sm font-semibold text-parchment mt-1">Zero PII On-Chain</span>
+            </div>
+            <div class="bg-surface p-4 rounded border-dark flex flex-col justify-between">
+                <span class="text-xs text-parchment/50 font-mono uppercase tracking-wider">Verification Model</span>
+                <span class="text-sm font-semibold text-parchment mt-1">Instant & Decentralized</span>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+            
+            <!-- Left Column: Context & Verification Flow -->
+            <div class="md:col-span-5 flex flex-col gap-6">
+                <div>
+                    <span class="text-xs font-semibold tracking-wider text-accent uppercase">Institutional Registrar</span>
+                    <h1 class="font-serif text-5xl leading-tight text-parchment mt-1 mb-3">
+                        Tamper-proof academic <span class="italic text-accent">verification.</span>
+                    </h1>
+                    <p class="text-parchment/70 text-sm leading-relaxed">
+                        Issue authentic degrees, diplomas, and certifications directly to an immutable ledger. Verify student records instantaneously without reliance on centralized databases.
+                    </p>
+                </div>
+
+                <!-- Process Steps Box -->
+                <div class="bg-surface p-5 rounded border-dark flex flex-col gap-4">
+                    <h3 class="text-xs font-mono uppercase tracking-wider text-accent">Verification Flow</h3>
+                    
+                    <div class="flex items-start gap-3">
+                        <span class="font-mono text-xs text-emerald bg-emerald/10 px-2 py-0.5 rounded border border-emerald/20">01</span>
+                        <div>
+                            <div class="text-xs font-semibold text-parchment">Deterministic Hashing</div>
+                            <div class="text-xs text-parchment/50 mt-0.5">Student ID, Degree, and Date are hashed into a 32-byte signature.</div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-3">
+                        <span class="font-mono text-xs text-emerald bg-emerald/10 px-2 py-0.5 rounded border border-emerald/20">02</span>
+                        <div>
+                            <div class="text-xs font-semibold text-parchment">Smart Contract Anchor</div>
+                            <div class="text-xs text-parchment/50 mt-0.5">The signature is written permanently to the registry contract.</div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-3">
+                        <span class="font-mono text-xs text-emerald bg-emerald/10 px-2 py-0.5 rounded border border-emerald/20">03</span>
+                        <div>
+                            <div class="text-xs font-semibold text-parchment">Instant Authentic Check</div>
+                            <div class="text-xs text-parchment/50 mt-0.5">Employers match inputs to confirm record validity in real-time.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Unified Dark Form Container -->
+            <div class="md:col-span-7">
+                <div class="bg-surface rounded border-dark overflow-hidden">
+                    
+                    <!-- Tab Switching -->
+                    <div class="flex border-b border-dark bg-backdrop/50">
+                        <button onclick="switchTab('issue')" id="tab-issue" class="flex-1 py-3 text-xs uppercase tracking-wider tab-active transition-all">Issue Credential</button>
+                        <button onclick="switchTab('verify')" id="tab-verify" class="flex-1 py-3 text-xs uppercase tracking-wider tab-inactive border-l border-dark transition-all">Verify Student Record</button>
+                    </div>
+
+                    <!-- Form Body -->
+                    <div class="p-6">
+                        <form id="credential-form" onsubmit="handleSubmit(event)" class="flex flex-col gap-4">
+                            
+                            <div class="flex flex-col gap-1.5">
+                                <label class="text-xs font-semibold text-parchment/80">Student ID / Roll Number</label>
+                                <input type="text" id="student_id" required class="w-full border-dark rounded px-3 py-2.5 text-sm font-mono placeholder:font-sans placeholder:text-parchment/30" placeholder="e.g. STU-2026-901">
+                            </div>
+
+                            <div class="flex flex-col gap-1.5">
+                                <label class="text-xs font-semibold text-parchment/80">Degree / Program Name</label>
+                                <input type="text" id="degree_name" required class="w-full border-dark rounded px-3 py-2.5 text-sm placeholder:text-parchment/30" placeholder="e.g. B.Tech Computer Science & Engineering">
+                            </div>
+
+                            <div class="flex flex-col gap-1.5">
+                                <label class="text-xs font-semibold text-parchment/80">Issuance Date</label>
+                                <input type="date" id="issue_date" required class="w-full border-dark rounded px-3 py-2.5 text-sm font-mono text-parchment">
+                            </div>
+
+                            <button type="submit" id="submit-btn" class="mt-2 w-full bg-emerald text-parchment py-3 rounded text-sm font-medium hover:opacity-90 transition-opacity">
+                                Anchor Credential to Ledger
+                            </button>
+                        </form>
+
+                        <!-- Dynamic Output Panel -->
+                        <div id="result-box" class="mt-6 p-4 border-dark rounded bg-backdrop hidden flex-col gap-2">
+                            <!-- Dynamic Response -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full border-t border-dark px-8 py-4 bg-surface text-center text-xs text-parchment/40">
+        Decentralized Academic Infrastructure • Powered by Ethereum Smart Contracts & FastAPI
+    </footer>
+
+    <script>
+        const API_URL = 'http://127.0.0.1:8000';
+        let currentMode = 'issue';
+
+        function switchTab(mode) {
+            currentMode = mode;
+            document.getElementById('result-box').classList.add('hidden');
+            
+            const btnIssue = document.getElementById('tab-issue');
+            const btnVerify = document.getElementById('tab-verify');
+            const submitBtn = document.getElementById('submit-btn');
+
+            if (mode === 'issue') {
+                btnIssue.className = 'flex-1 py-3 text-xs uppercase tracking-wider tab-active transition-all';
+                btnVerify.className = 'flex-1 py-3 text-xs uppercase tracking-wider tab-inactive border-l border-dark transition-all';
+                submitBtn.innerText = 'Anchor Credential to Ledger';
+                submitBtn.className = 'mt-2 w-full bg-emerald text-parchment py-3 rounded text-sm font-medium hover:opacity-90 transition-opacity';
+            } else {
+                btnVerify.className = 'flex-1 py-3 text-xs uppercase tracking-wider tab-active border-l border-dark transition-all';
+                btnIssue.className = 'flex-1 py-3 text-xs uppercase tracking-wider tab-inactive transition-all';
+                submitBtn.innerText = 'Verify Record Authenticity';
+                submitBtn.className = 'mt-2 w-full bg-parchment text-backdrop py-3 rounded text-sm font-medium hover:opacity-90 transition-opacity';
+            }
+        }
+
+        async function handleSubmit(e) {
+            e.preventDefault();
+            
+            const payload = {
+                student_id: document.getElementById('student_id').value,
+                degree_name: document.getElementById('degree_name').value,
+                issue_date: document.getElementById('issue_date').value
+            };
+
+            const submitBtn = document.getElementById('submit-btn');
+            const originalText = submitBtn.innerText;
+            submitBtn.innerText = 'Communicating with Ledger...';
+            submitBtn.disabled = true;
+
+            const endpoint = currentMode === 'issue' ? '/credentials/issue' : '/credentials/verify';
+            const resultBox = document.getElementById('result-box');
+
+            try {
+                const response = await fetch(`${API_URL}${endpoint}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                const data = await response.json();
+                resultBox.classList.remove('hidden');
+
+                if (!response.ok) throw new Error(data.detail || 'Request failed');
+
+                if (currentMode === 'issue') {
+                    resultBox.innerHTML = `
+                        <div class="text-xs uppercase tracking-wider text-emerald font-semibold flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-emerald"></span>
+                            Record Successfully Anchored
+                        </div>
+                        <div class="mt-2">
+                            <div class="text-xs text-parchment/60 mb-1">Generated Cryptographic Hash (SHA-256)</div>
+                            <div class="font-mono text-xs break-all bg-surface p-2.5 border-dark rounded text-parchment">${data.credential_hash}</div>
+                        </div>
+                    `;
+                } else {
+                    if (data.is_valid) {
+                        const date = new Date(data.issued_at_timestamp * 1000).toLocaleDateString();
+                        resultBox.innerHTML = `
+                            <div class="text-xs uppercase tracking-wider text-emerald font-semibold flex items-center gap-1.5">
+                                <span class="w-2 h-2 rounded-full bg-emerald"></span>
+                                Authentic Academic Record
+                            </div>
+                            <div class="text-sm mt-2 text-parchment/80">Issued by Registrar Address <span class="font-mono text-xs bg-surface px-1.5 py-0.5 rounded border-dark text-parchment">${data.issuer.substring(0, 10)}...</span> on ${date}</div>
+                        `;
+                    } else {
+                        resultBox.innerHTML = `
+                            <div class="text-xs uppercase tracking-wider text-crimson font-semibold flex items-center gap-1.5">
+                                <span class="w-2 h-2 rounded-full bg-crimson"></span>
+                                Record Unverified or Altered
+                            </div>
+                            <div class="text-sm mt-1 text-parchment/70">The submitted details do not correspond to any valid transaction on-chain.</div>
+                        `;
+                    }
+                }
+            } catch (error) {
+                resultBox.classList.remove('hidden');
+                resultBox.innerHTML = `<div class="text-xs font-mono text-crimson">Error: ${error.message}</div>`;
+            } finally {
+                submitBtn.innerText = originalText;
+                submitBtn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>
